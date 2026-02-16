@@ -1,7 +1,5 @@
-import re
-import csv
 from typing import List, Tuple
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 init(autoreset=True)
 
 
@@ -9,29 +7,25 @@ def main():
     km = []
     price = []
     try:
-
         km, price = parse_file(km, price)
-
-        data_len, Slope, intercept = ft_linear_regression(km, price)
-
-        test_data(Slope, intercept, km ,price)
-
+        print("km ->", km)
+        print("price ->", price)
+        Slope, intercept = ft_linear_regression(km, price)
+        test_data(Slope, intercept, km)
         estimateFunction(Slope, intercept)
-
     except FileNotFoundError as e:
-        print( e)
+        print(e)
     except BufferError as e:
-        print( e)
+        print(e)
     except IndexError as e:
         print(e)
-    except ValueError as e :
-        print( e)
+    except ValueError as e:
+        print(e)
 
 
 def estimateFunction(Slope, intercept):
     entred_mileage = float(input("\nEnter The Mileage of The car : "))
-    print(f"{Fore.CYAN}Estimated Price for {Fore.YELLOW} Miles {entred_mileage} {Fore.RED} →  {Fore.GREEN}{Slope * entred_mileage + intercept:.2f}{Style.RESET_ALL}")
-
+    print(f"{Fore.CYAN}Estimated Price for {Fore.YELLOW} Miles {entred_mileage} {Fore.RED} → {Fore.GREEN}{Slope * entred_mileage + intercept:.2f}{Style.RESET_ALL}")
 
 def parse_file(km: List[float], price: List[float]) -> Tuple[List[float], List[float]]:
     with open("../data.csv", "r", encoding="utf-8") as file:
@@ -49,15 +43,12 @@ def parse_file(km: List[float], price: List[float]) -> Tuple[List[float], List[f
 
 
 def ft_linear_regression(km: List[float], price: List[float]) -> Tuple[int, int ,int]:
-
     data_len = len(km)
     sum_x = 0
     sum_y = 0
-
     for i,j in zip(km, price):
         sum_x += i
         sum_y += j
-
     x_mean = sum_x / data_len
     y_mean = sum_y / data_len
 
@@ -75,15 +66,16 @@ def ft_linear_regression(km: List[float], price: List[float]) -> Tuple[int, int 
     print(f"{Style.BRIGHT}{Fore.MAGENTA}→  Slope:{Style.RESET_ALL} {Fore.GREEN}{Slope:.4f}{Style.RESET_ALL}")
     print(f"{Style.BRIGHT}{Fore.MAGENTA}→  Intercept:{Style.RESET_ALL} {Fore.YELLOW}{intercept:.4f}{Style.RESET_ALL}")
 
-    return data_len, Slope, intercept
+    return Slope, intercept
 
 
 def test_data(Slope: float, intercept : float, km :List[float]):
     estimatePrice = [Slope * x + intercept for x in km]
     print("Estimated values for the 5th giving in the  dataset : ")
     for x, y_hat in zip(km[:5], estimatePrice[:5]):
-        print(f"→ km={x} {Fore.GREEN} < ~~~~~~ > {Fore.RESET} estimate ={y_hat:.2f}")
+        print(f"→ km={x} {Fore.GREEN} < ~~~~~~ > {Fore.RESET} \
+              estimate ={y_hat:.2f}")
 
 
 if __name__ == "__main__":
-    print("hello")
+    main()
