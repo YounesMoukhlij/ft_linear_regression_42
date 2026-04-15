@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../mandatory'))
 import gradientDescent
 import math
 
@@ -28,8 +31,14 @@ def main():
     # Total Sum of Squares (Variance of the actual data)
     ss_tot = sum((y - mean_price) ** 2 for y in price)
 
+    # Normalize km values (same as in training)
+    x_min = min(km)
+    x_max = max(km)
+    km_norm = [(x - x_min) / (x_max - x_min) for x in km]
+
     # Residual Sum of Squares (Variance of the prediction error)
-    ss_res = sum((y - (theta0 + theta1 * x)) ** 2 for x, y in zip(km, price))
+    # Use normalized km values to match training scale
+    ss_res = sum((y - (theta0 + theta1 * x_norm)) ** 2 for x_norm, y in zip(km_norm, price))
 
     r_squared = 1 - (ss_res / ss_tot)
 
