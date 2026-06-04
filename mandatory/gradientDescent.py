@@ -80,7 +80,7 @@ def main():
         length = parseFunction(km, price)
         if length == 0:
             raise ValueError ("No training data provided")
-        len, Slope, Intercept = younes.ft_linear_regression(km, price)
+        Slope, Intercept = younes.ft_linear_regression(km, price)
         theta0, theta1 = train(km, price, length)
         print(f"\nAnalytical Result: Slope= {Slope:.4f}, Intercept= {Intercept:.4f}")
         print(f"Gradient Descent : Slope= {theta1:.4f}, Intercept= {theta0:.4f}")

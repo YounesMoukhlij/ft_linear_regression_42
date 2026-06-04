@@ -20,13 +20,11 @@ def main() -> None:
         for line in file:
             try:
                 tmpKm, tmpPrice = line.strip().split(',')
-                # Validate both are numeric
                 km_val = float(tmpKm)
                 price_val = float(tmpPrice)
                 price.append(price_val)
                 km.append(km_val)
             except (ValueError, IndexError):
-                # Skip invalid rows
                 continue
 
         finalPrice = np.array(price, dtype='float64')
@@ -35,16 +33,12 @@ def main() -> None:
         print(f"km: {finalKm[:5]}...")
         print(f"price: {finalPrice[:5]}...")
 
-        # Train using gradient descent to get theta0 and theta1
         theta0, theta1 = gradientDescent.train(finalKm.tolist(), finalPrice.tolist(), len(finalKm))
 
-        # Calculate estimated prices using gradient descent model
         estimatedPrice = calculatePrice(finalKm.tolist(), theta0, theta1)
 
 
         estimatedPrice_array = np.array(estimatedPrice, dtype='float64')
-
-        # Sort by km to align actual and predicted prices
         sorted_indices = np.argsort(finalKm)
         sorted_km = finalKm[sorted_indices]
         sorted_actual_price = finalPrice[sorted_indices]
@@ -52,7 +46,6 @@ def main() -> None:
 
         plt.figure(figsize=(30, 10))
 
-        # First plot: Raw data distribution
         plt.subplot(1, 2, 1)
         plt.scatter(finalKm, finalPrice, alpha=0.5, label='Actual Data')
         plt.xlabel("Distance (km)")
@@ -61,7 +54,6 @@ def main() -> None:
         plt.legend()
         plt.grid(True)
 
-        # Second plot: Regression line with sorted data
         plt.subplot(1, 2, 2)
         plt.scatter(sorted_km, sorted_actual_price, alpha=0.5, label='Actual Data', color='blue')
         plt.plot(sorted_km, sorted_estimated_price, 'r-', linewidth=2, label='Gradient Descent Fit')

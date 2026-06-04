@@ -8,8 +8,8 @@ def main():
     price = []
     try:
         km, price = parse_file(km, price)
-        print("km ->", km)
-        print("price ->", price)
+        # print("km ->", km)
+        # print("price ->", price)
         Slope, intercept = ft_linear_regression(km, price)
         test_data(Slope, intercept, km)
         estimateFunction(Slope, intercept)
