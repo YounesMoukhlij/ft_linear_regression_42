@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -14,7 +16,8 @@ def calculatePrice(km: list[float], slope: float, intercept: float) -> list[floa
     return y
 
 def main() -> None:
-    with open('../data.csv', 'r') as file:
+    data_path = os.path.join(os.path.dirname(__file__), '..', 'data.csv')
+    with open(data_path, 'r') as file:
         price = []
         km = []
         for line in file:
@@ -35,7 +38,7 @@ def main() -> None:
 
         theta0, theta1 = gradientDescent.train(finalKm.tolist(), finalPrice.tolist(), len(finalKm))
 
-        estimatedPrice = calculatePrice(finalKm.tolist(), theta0, theta1)
+        estimatedPrice = calculatePrice(finalKm.tolist(), theta1, theta0)
 
 
         estimatedPrice_array = np.array(estimatedPrice, dtype='float64')
@@ -67,7 +70,11 @@ def main() -> None:
         print(f"Theta0 (intercept): {theta0:.4f}")
         print(f"Theta1 (slope): {theta1:.4f}")
 
+        output_path = os.path.join(os.path.dirname(__file__), "regression_plot.png")
         plt.show()
+        plt.savefig(output_path, dpi=200, bbox_inches="tight")
+        plt.close()
+        print(f"\nFigure saved to: {output_path}")
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,12 @@
+from pathlib import Path
 from typing import List, Tuple
 import estimatePrice as younes
 
 
 def parseFunction(km : List[float], price: List[float]) :
     try:
-        with open("../data.csv", "r", encoding="utf-8") as f:
+        data_path = Path(__file__).resolve().parent.parent / "data.csv"
+        with open(data_path, "r", encoding="utf-8") as f:
             line = f.readlines()
             for i in line:
                 if not i:
@@ -90,4 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    print("Gradient Descent")

@@ -1,5 +1,17 @@
+from pathlib import Path
 from typing import List, Tuple
-from colorama import init, Fore, Style
+
+try:
+    from colorama import init, Fore, Style
+except ModuleNotFoundError:
+    class _DummyColor:
+        def __getattr__(self, name):
+            return ""
+
+    init = lambda *args, **kwargs: None
+    Fore = _DummyColor()
+    Style = _DummyColor()
+
 init(autoreset=True)
 
 
@@ -12,7 +24,7 @@ def main():
         # print("price ->", price)
         Slope, intercept = ft_linear_regression(km, price)
         test_data(Slope, intercept, km)
-        estimateFunction(Slope, intercept)
+        estimatePrice(Slope, intercept)
     except FileNotFoundError as e:
         print(e)
     except BufferError as e:
@@ -23,12 +35,13 @@ def main():
         print(e)
 
 
-def estimateFunction(Slope, intercept):
+def estimatePrice(Slope, intercept):
     entred_mileage = float(input("\nEnter The Mileage of The car : "))
     print(f"{Fore.CYAN}Estimated Price for {Fore.YELLOW} Miles {entred_mileage} {Fore.RED} → {Fore.GREEN}{Slope * entred_mileage + intercept:.2f}{Style.RESET_ALL}")
 
 def parse_file(km: List[float], price: List[float]) -> Tuple[List[float], List[float]]:
-    with open("../data.csv", "r", encoding="utf-8") as file:
+    data_path = Path(__file__).resolve().parent.parent / "data.csv"
+    with open(data_path, "r", encoding="utf-8") as file:
         for i in file:
             if not i:
                 continue
@@ -42,7 +55,7 @@ def parse_file(km: List[float], price: List[float]) -> Tuple[List[float], List[f
     return km, price
 
 
-def ft_linear_regression(km: List[float], price: List[float]) -> Tuple[int, int ,int]:
+def ft_linear_regression(km: List[float], price: List[float]) -> Tuple[float, float]:
     data_len = len(km)
     sum_x = 0
     sum_y = 0
